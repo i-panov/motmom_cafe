@@ -1,0 +1,8 @@
+form.login table label {
+    margin: 5% auto 0 auto;
+}
+
+form.login table input[type="submit"] {
+    display: block;
+    margin-top: 10%;
+}
