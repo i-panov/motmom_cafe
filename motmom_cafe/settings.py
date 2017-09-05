@@ -128,6 +128,9 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
 
+MEDIA_ROOT = '/var/tmp/'
+
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': True,
