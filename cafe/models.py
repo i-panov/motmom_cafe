@@ -18,9 +18,9 @@ class Category(models.Model):
 
 class Product(models.Model):
     name = models.CharField('Название', max_length=20)
-    description = models.CharField('Описание', max_length=200)
-    preview = models.ImageField('Изображение', upload_to='products')    
-    purchases_count = models.IntegerField('Количество покупок', default=0)
+    preview = models.ImageField('Изображение', upload_to='products')
+    price = models.PositiveIntegerField('Цена', default=0)
+    purchases_count = models.PositiveIntegerField('Количество покупок', default=0)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
     def __str__(self):

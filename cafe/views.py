@@ -7,26 +7,25 @@ from django.template import RequestContext, loader
 from django.contrib.auth.decorators import login_required
 from .models import Category, Product
 
-
 MOST_POPULAR_CATEGORY = Category(name='Самое популярное')
 
 
 @login_required
-def getMostPopular(request):
+def get_most_popular(request):
     return render(request, 'cafe/menu.html', {
-        'categories': [ MOST_POPULAR_CATEGORY ] + list(Category.objects.all()),
+        'categories': [MOST_POPULAR_CATEGORY] + list(Category.objects.all()),
         'checked_category': MOST_POPULAR_CATEGORY,
         'products': Product.objects.order_by('-purchases_count')[:5]
     })
 
 
 @login_required
-def getCategory(request, pk):
-    categories = [ MOST_POPULAR_CATEGORY ] + list(Category.objects.all())
+def get_category(request, pk):
+    categories = list(Category.objects.all())
     checked_category = next(cat for cat in categories if cat.id == int(pk))
 
     return render(request, 'cafe/menu.html', {
-        'categories': categories,
+        'categories': [MOST_POPULAR_CATEGORY] + categories,
         'checked_category': checked_category,
         'products': checked_category.product_set.all()
     })
