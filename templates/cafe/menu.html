@@ -1,6 +1,6 @@
-
-<ul>
-{% for cat in categories %}
-    <li><label><input type="radio" name="category" {% if cat.id == checked_category.id %}checked{% endif %}>{{cat.name}}</label></li>
-{% endfor %}
-</ul>
+{% extends 'cafe/header.html' %}
+{% load staticfiles %}
+{% block title %} Меню {% endblock title %}
+{% block styles %}<link rel="stylesheet" href="{% static 'css/menu.css' %}">{% endblock %}
+{% block main_content %}
+{% endblock main_content %}

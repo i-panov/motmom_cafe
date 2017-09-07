@@ -5,13 +5,15 @@ from django.views import generic
 from django.http import HttpResponse
 from django.template import RequestContext, loader
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
+
 from .models import Category, Product
 
 MOST_POPULAR_CATEGORY = Category(name='Самое популярное')
 
 
 @login_required
-def get_most_popular(request):
+def most_popular(request):
     return render(request, 'cafe/menu.html', {
         'categories': [MOST_POPULAR_CATEGORY] + list(Category.objects.all()),
         'checked_category': MOST_POPULAR_CATEGORY,
@@ -20,7 +22,7 @@ def get_most_popular(request):
 
 
 @login_required
-def get_category(request, pk):
+def category(request, pk):
     categories = list(Category.objects.all())
     checked_category = next(cat for cat in categories if cat.id == int(pk))
 
@@ -29,3 +31,10 @@ def get_category(request, pk):
         'checked_category': checked_category,
         'products': checked_category.product_set.all()
     })
+
+
+@login_required
+@require_POST
+def cart(request):
+    products = {Product.objects.get(pk): count for pk, count in request.body.entries()}
+    return render(request, 'cafe/cart.html', {'products': products})

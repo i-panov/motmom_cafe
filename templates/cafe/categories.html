@@ -1,0 +1,5 @@
+{% foreach category in categories %}
+<div class="{% ifequal cat.id checked_category.id %}active{% endifequal %}">
+    {{ category.name }}
+</div>
+{% endforeach %}
