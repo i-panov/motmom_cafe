@@ -2,17 +2,19 @@
 {% load staticfiles %}
 {% block styles %}<link rel="stylesheet" href="{% static 'css/header.css' %}">{% endblock %}
 {% block content %}
-<div>
-    <div>MOTMOM-cafe</div>
-    <div>
+<div class="row" style="margin-top: 2%;">
+    <div class="col-md-2" style="padding-left: 10%;">Кафе MOTMOM</div>
+    <div class="col-md-offset-3 col-md-4">
         <a href="/" class="btn btn-default">Главная</a>
-        <button id="cart" class="btn btn-default">Корзина</button>
+        <a href="#" id="cart" class="btn btn-default">Корзина</a>
     </div>
-    <div>
-        <div>Username</div>
-        <button class="btn btn-default">Выйти</button>
+    <div class="col-md-offset-1 col-md-2" style="padding-left: 8%;">
+        <div style="display: inline-block;">Username</div>
+        <a href="#" class="btn btn-default">Выйти</a>
     </div>
 </div>
+<div class="row">
 {% block main_content %}{% endblock main_content %}
+</div>
 {% endblock content %}
 {% block scripts %}<script type="text/javascript" src="{% static 'js/header.js' %}"></script>{% endblock %}

@@ -3,4 +3,13 @@
 {% block title %} Корзина {% endblock title %}
 {% block styles %}<link rel="stylesheet" href="{% static 'css/cart.css' %}">{% endblock %}
 {% block main_content %}
+<div class="col-md-offset-3 col-md-6">
+    {% foreach product in products %}
+        <div>
+            {% include 'cafe/product_detail.html' %}
+        </div>
+        <input type="number" value="0" min="0">
+        <div>&times;</div>
+    {% endforeach %}
+</div>
 {% endblock main_content %}
