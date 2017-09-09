@@ -128,7 +128,8 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
 
-MEDIA_ROOT = '/var/tmp/'
+MEDIA_ROOT = '/var/tmp/media/'
+MEDIA_URL = '/media/'
 
 
 LOGGING = {

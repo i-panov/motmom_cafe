@@ -2,19 +2,20 @@
 {% load staticfiles %}
 {% block title %} Меню {% endblock title %}
 {% block styles %}<link rel="stylesheet" href="{% static 'css/menu.css' %}">{% endblock %}
+{% block username %}{{ user.name }}{% endblock username %}
 {% block main_content %}
 <div class="col-md-4">
-    {% foreach category in categories %}
-        <div class="{% ifequal cat.id checked_category.id %}active{% endifequal %}">
+    {% for category in categories %}
+        <a class="{% ifequal cat.id checked_category.id %}active{% endifequal %}" style="display: block;" href="/{{ category.id }}">
             {{ category.name }}
-        </div>
-    {% endforeach %}
+        </a>
+    {% endfor %}
 </div>
 <div class="col-md-offset-2 col-md-5">
-    {% foreach product in products %}
+    {% for product in products %}
         <div>
-            {% include 'cafe/product_detail.html' %}
+            {% include 'cafe/product_detail.html' with product=product %}
         </div>
-    {% endforeach %}
+    {% endfor %}
 </div>
 {% endblock main_content %}
