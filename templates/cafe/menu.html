@@ -2,11 +2,11 @@
 {% load staticfiles %}
 {% block title %} Меню {% endblock title %}
 {% block styles %}<link rel="stylesheet" href="{% static 'css/menu.css' %}">{% endblock %}
-{% block username %}<a href="/profile">{{ user.name }}</a>{% endblock username %}
+{% block username %}<a href="{% url 'accounts:profile' %}">{{ user.username }}</a>{% endblock username %}
 {% block main_content %}
 <div class="col-md-4">
     {% for category in categories %}
-        <a class="{% ifequal cat.id checked_category.id %}active{% endifequal %}" style="display: block;" href="/{{ category.id }}">
+        <a class="{% ifequal cat.id checked_category.id %}active{% endifequal %}" style="display: block;" href="{% url 'cafe:category' pk=category.id %}">
             {{ category.name }}
         </a>
     {% endfor %}

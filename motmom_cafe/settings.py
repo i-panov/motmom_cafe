@@ -27,6 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+SITE_ID = 1
 
 # Application definition
 
@@ -37,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'qrcode',
     'cafe.apps.CafeConfig',
     'accounts.apps.AccountsConfig',
@@ -104,6 +106,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 LOGIN_REDIRECT_URL = '/'
+# LOGOUT_REDIRECT_URL = '/login'
 
 
 # Internationalization
