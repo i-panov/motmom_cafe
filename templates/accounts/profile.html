@@ -1,0 +1,34 @@
+{% extends 'cafe/header.html' %}
+{% load staticfiles %}
+{% load qr_tags %}
+{% block title %} Профиль {% endblock title %}
+{% block styles %}<link rel="stylesheet" href="{% static 'css/profile.css' %}">{% endblock %}
+{% block username %}<a href="{% url 'accounts:profile' %}">{{ user.username }}</a>{% endblock username %}
+
+{% block main_content %}
+
+    <div>В этом месяце ({% now 'm' %}) вы уже потратили {{ sum }} рублей.</div>
+
+    <div>
+        {% for order in orders %}
+            <a href="{% url 'accounts:order' %}">
+                <div class="round completed-{{ completed }}"></div>
+                <div>{% qr_from_text order.token 's' %}</div>
+                <div>{{ order.date }}</div>
+                <div>{{ order.sum }}</div>
+            </a>
+        {% endfor %}
+    </div>
+
+    {% if user.is_superuser %}
+        <div>Административные возможности</div>
+
+        <div>
+            <input placeholder="код заказа" type="text">
+            <a href="{% url 'accounts:order' %}">Получить заказ</a>
+            <a href="{% url 'accounts:statistics' %}">Статистика</a>
+            <a href="{% url 'admin' %}">Админка</a>
+        </div>
+    {% endif %}
+
+{% endblock main_content %}

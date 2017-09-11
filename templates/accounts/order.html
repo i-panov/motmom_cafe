@@ -1,0 +1,13 @@
+{% extends 'cafe/header.html' %}
+{% block title %} Заказ {% endblock title %}
+{% block styles %}<link rel="stylesheet" href="{% static 'css/order.css' %}">{% endblock %}
+{% block username %}<a href="{% url 'accounts:profile' %}">{{ user.username }}</a>{% endblock username %}
+
+{% block main_content %}
+    {% for item in order_items %}
+        <div>
+            {% include 'cafe/product_detail.html' with product=item.product %}
+        </div>
+        <div>{{ item.count }}</div>
+    {% endfor %}
+{% endblock main_content %}

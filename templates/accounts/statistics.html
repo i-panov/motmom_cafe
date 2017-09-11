@@ -1,0 +1,34 @@
+{% extends 'cafe/header.html' %}
+{% block title %} Статистика {% endblock title %}
+{% block styles %}<link rel="stylesheet" href="{% static 'css/statistics.css' %}">{% endblock %}
+{% block username %}<a href="{% url 'accounts:profile' %}">{{ user.username }}</a>{% endblock username %}
+
+{% block main_content %}
+    <table>
+        {% for year_item in years %}
+            <tr><th>{{ year_item.year }} год</th></tr>
+            <tr>
+                <td>Январь</td>
+                <td>Февраль</td>
+                <td>Март</td>
+                <td>Апрель</td>
+                <td>Май</td>
+                <td>Июнь</td>
+                <td>Июль</td>
+                <td>Август</td>
+                <td>Сентябрь</td>
+                <td>Октябрь</td>
+                <td>Ноябрь</td>
+                <td>Декабрь</td>
+            </tr>
+            {% for employee in year_item.employees %}
+            <tr>
+                <td>{{ employee.name }}</td>
+                {% for sum in employee.months %}
+                <td>{{ sum }}ч</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        {% endfor %}
+    </table>
+{% endblock main_content %}
