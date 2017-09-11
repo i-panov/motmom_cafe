@@ -6,3 +6,8 @@ function lsSet(key, value) {
 function lsGet(key) {
     return JSON.parse(localStorage.getItem(key));
 }
+
+
+if (lsGet('cart') === null) {
+    lsSet('cart', {});
+}

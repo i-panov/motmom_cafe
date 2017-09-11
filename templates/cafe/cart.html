@@ -2,6 +2,7 @@
 {% load staticfiles %}
 {% block title %} Корзина {% endblock title %}
 {% block styles %}<link rel="stylesheet" href="{% static 'css/cart.css' %}">{% endblock %}
+{% block username %}<a href="/profile">{{ user.name }}</a>{% endblock username %}
 {% block main_content %}
 <div class="col-md-offset-3 col-md-6">
     {% for product in products %}
