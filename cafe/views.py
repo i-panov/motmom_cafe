@@ -37,8 +37,8 @@ def category(request, pk):
 
 
 @login_required
-#@require_POST
-def cart(request):
+@require_POST
+def render_cart(request):
     data = json.loads(request.POST['cart'])
     products = {Product.objects.get(pk=pk): count for pk, count in data.items()}
     return render(request, 'cafe/cart.html', {'products': products})

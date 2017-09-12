@@ -6,7 +6,7 @@
     <div class="col-md-2" style="padding-left: 10%;">Кафе MOTMOM</div>
     <div class="col-md-offset-3 col-md-4">
         <a href="{% url 'cafe:most_popular' %}" class="btn btn-default">Главная</a>
-        <a href="#" id="cart" class="btn btn-default">Корзина</a>
+        <a href="{% url 'cafe:cart' %}" id="cart" class="btn btn-default">Корзина</a>
     </div>
     <div class="col-md-offset-1 col-md-2" style="padding-left: 8%;">
         <div style="display: inline-block;">{% block username %}{% endblock username %}</div>
@@ -16,9 +16,5 @@
 <div class="row" style="margin-top: 2%;">
 {% block main_content %}{% endblock main_content %}
 </div>
-<form action="/cart/" method="post" id="cart-form" style="display: none;">
-    <textarea id="cart-data" name="cart" title="cart-data"></textarea>
-    {% csrf_token %}
-</form>
 {% endblock content %}
 {% block scripts %}<script type="text/javascript" src="{% static 'js/header.js' %}"></script>{% endblock %}
