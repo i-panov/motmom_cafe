@@ -1,8 +1,10 @@
 {% extends 'cafe/header.html' %}
 {% load staticfiles %}
 {% block title %} Меню {% endblock title %}
-{% block styles %}<link rel="stylesheet" href="{% static 'css/menu.css' %}">{% endblock %}
-{% block username %}<a href="{% url 'accounts:profile' %}">{{ user.username }}</a>{% endblock username %}
+{% block styles %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'css/menu.css' %}">
+{% endblock %}
 {% block main_content %}
 <div class="col-md-4">
     {% for category in categories %}
@@ -22,3 +24,7 @@
     {% endfor %}
 </div>
 {% endblock main_content %}
+{% block scripts %}
+    {{ block.super }}
+    <script type="text/javascript" src="{% static 'js/menu.js' %}"></script>
+{% endblock %}

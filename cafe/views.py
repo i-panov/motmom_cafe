@@ -15,8 +15,7 @@ def render_menu(request, categories, checked_category, products):
     return render(request, 'cafe/menu.html', {
         'categories': [MOST_POPULAR_CATEGORY] + list(categories),
         'checked_category': checked_category,
-        'products': products,
-        'user': request.user
+        'products': products
     })
 
 

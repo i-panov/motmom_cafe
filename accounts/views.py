@@ -9,8 +9,7 @@ def profile(request):
 
     return render(request, 'accounts/profile.html', {
         'orders': orders,
-        'sum': sum(o.sum for o in orders),
-        'user': request.user
+        'sum': sum(o.sum for o in orders)
     })
 
 

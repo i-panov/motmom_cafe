@@ -9,7 +9,7 @@
         <a href="{% url 'cafe:cart' %}" id="cart" class="btn btn-default">Корзина</a>
     </div>
     <div class="col-md-offset-1 col-md-2" style="padding-left: 8%;">
-        <div style="display: inline-block;">{% block username %}{% endblock username %}</div>
+        <div style="display: inline-block;"><a href="{% url 'accounts:profile' %}">{{ user.username }}</a></div>
         <a href="{% url 'accounts:logout' %}" class="btn btn-default">Выйти</a>
     </div>
 </div>

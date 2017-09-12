@@ -1,7 +1,9 @@
 {% extends 'cafe/header.html' %}
 {% block title %} Статистика {% endblock title %}
-{% block styles %}<link rel="stylesheet" href="{% static 'css/statistics.css' %}">{% endblock %}
-{% block username %}<a href="{% url 'accounts:profile' %}">{{ user.username }}</a>{% endblock username %}
+{% block styles %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'css/statistics.css' %}">
+{% endblock %}
 
 {% block main_content %}
     <table>

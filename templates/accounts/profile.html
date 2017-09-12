@@ -2,8 +2,10 @@
 {% load staticfiles %}
 {% load qr_tags %}
 {% block title %} Профиль {% endblock title %}
-{% block styles %}<link rel="stylesheet" href="{% static 'css/profile.css' %}">{% endblock %}
-{% block username %}<a href="{% url 'accounts:profile' %}">{{ user.username }}</a>{% endblock username %}
+{% block styles %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+{% endblock %}
 
 {% block main_content %}
 
