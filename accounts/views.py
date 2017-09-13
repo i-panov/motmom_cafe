@@ -75,7 +75,9 @@ def check_order(request):
     return redirect('accounts:order', pk=current.pk)
 
 
+@require_POST
 def set_order_status(request):
-    order = Order.objects.get(pk=request.POST['id'])
+    order = Order.objects.get(pk=request.POST['pk'])
     order.completed = request.POST['status']
     order.save()
+    return JsonResponse({'status': 'success'})
