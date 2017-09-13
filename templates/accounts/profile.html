@@ -14,26 +14,28 @@
 
         <div>
             {% for order in orders %}
-                <a href="{% url 'accounts:order' %}" class="row">
+                <div class="row my-row">
                     <div class="col-md-1 item">
                         <div class="round completed-{{ order.completed }}"></div>
                     </div>
                     <div class="col-md-3">{% qr_from_text order.token 's' %}</div>
-                    <div class="col-md-4 item">{{ order.date }}</div>
+                    <div class="col-md-4 item"><a href="{% url 'accounts:order' pk=order.pk %}">{{ order.date }}</a></div>
                     <div class="col-md-3 item">{{ order.sum }} рублей</div>
-                </a>
+                    <img class="col-md-1 item" src="https://clipboardjs.com/assets/images/clippy.svg" style="cursor: pointer;" onclick="copyTextToClipboard('{{ order.token }}')">
+                </div>
             {% endfor %}
         </div>
 
-
         {% if user.is_superuser %}
             <div style="margin-top: 3%;">
-                <hr style="border-top: 1px solid black;">
                 <div style="margin-bottom: 10px;">Административные возможности</div>
 
                 <div>
-                    <input placeholder="код заказа" type="text">
-                    <a href="{% url 'accounts:order' %}" class="btn btn-default">Получить заказ</a>
+                    <form action="{% url 'accounts:check_order' %}" method="post" style="display: inline-block;">
+                        {% csrf_token %}
+                        <input placeholder="код заказа" type="text" autocomplete="off" name="token">
+                        <input type="submit" class="btn btn-default" value="Получить заказ">
+                    </form>
                     <a href="{% url 'accounts:statistics' %}" class="btn btn-default" style="margin-left: 100px;">Статистика</a>
                     <a href="{% url 'admin:index' %}" class="btn btn-default">Админка</a>
                 </div>

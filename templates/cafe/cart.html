@@ -9,12 +9,12 @@
     {% if products %}
         <div class="col-md-offset-3 col-md-6">
             {% for product in products %}
-                <div class="row" style="margin-top: 20px;">
+                <div class="row my-row" style="margin-top: 20px;">
                     <div class="col-md-offset-3 col-md-2">
                         {% include 'cafe/product_detail.html' %}
                     </div>
                     <input class="product col-md-2" style="margin-top: 30px;" type="number" value="0" min="0" autocomplete="off" id="{{ product.id }}">
-                    <div class="remove-product col-md-2" style="margin-top: 30px;">&times;</div>
+                    <div class="remove-product col-md-2" style="margin-top: 30px; cursor: pointer;">&times;</div>
                 </div>
             {% endfor %}
             <input id="add-order" type="submit" value="Заказать" style="margin-top: 50px; margin-left: 350px;">

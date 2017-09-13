@@ -21,6 +21,16 @@ function getCookie(name) {
     return cookieValue;
 }
 
+function copyTextToClipboard(text) {
+    var input = document.createElement('input');
+    input.display = 'none';
+    input.value = text;
+    document.body.appendChild(input);
+    input.select();
+    document.execCommand('copy');
+    document.body.removeChild(input);
+}
+
 if (lsGet('cart') === null) {
     lsSet('cart', {});
 }
