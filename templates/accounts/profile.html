@@ -9,28 +9,37 @@
 
 {% block main_content %}
 
-    <div>В этом месяце ({% now 'm' %}) вы уже потратили {{ sum }} рублей.</div>
-
-    <div>
-        {% for order in orders %}
-            <a href="{% url 'accounts:order' %}">
-                <div class="round completed-{{ completed }}"></div>
-                <div>{% qr_from_text order.token 's' %}</div>
-                <div>{{ order.date }}</div>
-                <div>{{ order.sum }}</div>
-            </a>
-        {% endfor %}
-    </div>
-
-    {% if user.is_superuser %}
-        <div>Административные возможности</div>
+    <div class="col-md-offset-4 col-md-4">
+        <div style="margin-bottom: 5%; font-style: italic; font-weight: bold;">В этом месяце ({% now 'F' %}) вы уже потратили {{ sum }} рублей.</div>
 
         <div>
-            <input placeholder="код заказа" type="text">
-            <a href="{% url 'accounts:order' %}">Получить заказ</a>
-            <a href="{% url 'accounts:statistics' %}">Статистика</a>
-            <a href="{% url 'admin:index' %}">Админка</a>
+            {% for order in orders %}
+                <a href="{% url 'accounts:order' %}" class="row">
+                    <div class="col-md-1 item">
+                        <div class="round completed-{{ order.completed }}"></div>
+                    </div>
+                    <div class="col-md-3">{% qr_from_text order.token 's' %}</div>
+                    <div class="col-md-4 item">{{ order.date }}</div>
+                    <div class="col-md-3 item">{{ order.sum }} рублей</div>
+                </a>
+            {% endfor %}
         </div>
-    {% endif %}
+
+
+        {% if user.is_superuser %}
+            <div style="margin-top: 3%;">
+                <hr style="border-top: 1px solid black;">
+                <div style="margin-bottom: 10px;">Административные возможности</div>
+
+                <div>
+                    <input placeholder="код заказа" type="text">
+                    <a href="{% url 'accounts:order' %}" class="btn btn-default">Получить заказ</a>
+                    <a href="{% url 'accounts:statistics' %}" class="btn btn-default" style="margin-left: 100px;">Статистика</a>
+                    <a href="{% url 'admin:index' %}" class="btn btn-default">Админка</a>
+                </div>
+            </div>
+        {% endif %}
+
+    </div>
 
 {% endblock main_content %}

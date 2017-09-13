@@ -15,7 +15,7 @@ def profile(request):
 
     return render(request, 'accounts/profile.html', {
         'orders': orders,
-        'sum': sum(o.sum for o in orders)
+        'sum': sum(o.sum for o in orders if o.completed)
     })
 
 
