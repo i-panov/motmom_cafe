@@ -17,10 +17,10 @@
                     <div class="remove-product col-md-2" style="margin-top: 30px;">&times;</div>
                 </div>
             {% endfor %}
-            <input type="submit" value="Заказать" style="margin-top: 50px; margin-left: 350px;">
+            <input id="add-order" type="submit" value="Заказать" style="margin-top: 50px; margin-left: 350px;">
         </div>
     {% else %}
-        <div>В корзине пусто</div>
+        <h4 class="col-md-offset-5 col-md-2" style="margin-top: 10%; color: red;">В корзине пусто</h4>
     {% endif %}
 {% endblock main_content %}
 {% block scripts %}

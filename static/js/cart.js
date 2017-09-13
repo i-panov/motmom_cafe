@@ -36,6 +36,20 @@ $(document).ready(function() {
                 lsSet('cart', cart);
                 row.remove();
             });
+
+            $('#add-order').on('click', function() {
+                $.ajax({
+                    url: '/accounts/order/add/',
+                    type: 'POST',
+                    data: {cart: JSON.stringify(lsGet('cart'))},
+                    success: function (data) {
+                        if (data.status === 'success') {
+                            lsSet('cart', {});
+                            window.location = '/';
+                        }
+                    }
+                });
+            });
         }
     });
 });

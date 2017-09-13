@@ -1,7 +1,13 @@
+import json
+
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from urllib.parse import unquote_plus
 
-from .models import Order
+from django.views.decorators.http import require_POST
+
+from cafe.models import Product
+from .models import Order, OrderItem
 
 
 def profile(request):
@@ -30,6 +36,23 @@ def statistics(request):
     }
 
     return render(request, 'accounts/statistics.html')
+
+
+@require_POST
+def add_order(request):
+    cart = json.loads(request.POST['cart'])
+    order = Order(user=request.user)
+    order.save()
+
+    for pk, count in cart.items():
+        if count > 0:
+            item = OrderItem(order=order, product=Product.objects.get(pk=pk), count=count)
+            item.save()
+
+            order.orderitem_set.add(item)
+
+    order.save()
+    return JsonResponse({'status': 'success'})
 
 
 def order(request):
