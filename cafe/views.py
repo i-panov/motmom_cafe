@@ -6,38 +6,56 @@ from django.views.decorators.http import require_POST
 
 import json
 
+from django.views.generic import TemplateView, DetailView, ListView, RedirectView
+
 from .models import Category, Product
+
 
 MOST_POPULAR_CATEGORY = Category(id='', name='Самое популярное')
 
 
-def render_menu(request, categories, checked_category, products):
-    return render(request, 'cafe/menu.html', {
-        'categories': [MOST_POPULAR_CATEGORY] + list(categories),
-        'checked_category': checked_category,
-        'products': products
-    })
+class MenuView(DetailView):
+    template_name = 'cafe/menu.html'
+    model = Category
+    context_object_name = 'checked_category'
 
-
-@login_required
-def most_popular(request):
     categories = Category.objects.all()
-    checked_category = MOST_POPULAR_CATEGORY
-    products = Product.objects.order_by('-purchases_count')[:5]
-    return render_menu(request, categories, checked_category, products)
+
+    def get_object(self, queryset=None):
+        return MOST_POPULAR_CATEGORY
+
+    def get_context_data(self, **kwargs):
+        context = super(MenuView, self).get_context_data(**kwargs)
+        context['categories'] = [MOST_POPULAR_CATEGORY] + list(self.categories)
+        return context
 
 
-@login_required
-def category(request, pk):
-    categories = Category.objects.all()
-    checked_category = next(cat for cat in categories if cat.id == int(pk))
-    products = checked_category.product_set.all()
-    return render_menu(request, categories, checked_category, products)
+class MostPopularView(MenuView):
+    def get_context_data(self, **kwargs):
+        context = super(MostPopularView, self).get_context_data(**kwargs)
+        context['products'] = Product.objects.order_by('-purchases_count')[:5]
+        return context
 
 
-@login_required
-@require_POST
-def render_cart(request):
-    data = json.loads(request.POST['cart'])
-    products = {Product.objects.get(pk=pk): count for pk, count in data.items()}
-    return render(request, 'cafe/cart.html', {'products': products})
+class CategoryView(MenuView):
+    def get_object(self, queryset=None):
+        return next(cat for cat in self.categories if cat.id == int(self.kwargs['pk']))
+
+    def get_context_data(self, **kwargs):
+        context = super(CategoryView, self).get_context_data(**kwargs)
+        context['products'] = self.get_object().product_set.all()
+        return context
+
+
+class RenderCartView(ListView):
+    template_name = 'cafe/cart.html'
+    http_method_names = ['post']
+    context_object_name = 'products'
+    model = Product
+
+    def get_queryset(self):
+        products = json.loads(self.request.POST['products'])
+        return Product.objects.filter(pk__in=products)
+
+    def post(self, request):
+        return self.get(request)

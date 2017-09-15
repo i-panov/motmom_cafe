@@ -36,7 +36,7 @@
                         <input placeholder="код заказа" type="text" autocomplete="off" name="token">
                         <input type="submit" class="btn btn-default" value="Получить заказ">
                     </form>
-                    <a href="{% url 'accounts:statistics' %}" class="btn btn-default" style="margin-left: 100px;">Статистика</a>
+                    <a href="{% url 'accounts:stats' %}?year={% now 'Y' %}&month={% now 'n' %}" class="btn btn-default" style="margin-left: 100px;">Статистика</a>
                     <a href="{% url 'admin:index' %}" class="btn btn-default">Админка</a>
                 </div>
             </div>

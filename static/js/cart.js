@@ -4,7 +4,7 @@ $(document).ready(function() {
     $.ajax({
         url: '/cart/render/',
         type: 'POST',
-        data: { cart: JSON.stringify(cart) },
+        data: { products: JSON.stringify(Object.keys(cart)) },
         success: function (data) {
             $('html')[0].innerHTML = data;
 

@@ -1,0 +1,37 @@
+{% extends 'header.html' %}
+{% load staticfiles %}
+{% block title %} Статистика {% endblock title %}
+{% block styles %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'css/stats.css' %}">
+{% endblock %}
+
+{% block main_content %}
+    <div class="col-md-offset-4 col-md-3">
+        <div class="row">
+            <form class="col-md-offset-1 col-md-10" action="{% url 'accounts:stats' %}" method="get">
+                <div class="row">
+                    <input class="col-md-3" type="number" min="2000" max="2099" autocomplete="off" name="year" value="{{ year }}">
+                    <input class="col-md-offset-1 col-md-3"  type="number" min="1" max="31" autocomplete="off" name="month" value="{{ month }}">
+                    <input class="col-md-offset-1 col-md-4"  type="submit" value="Показать">
+                </div>
+            </form>
+        </div>
+
+        <div class="row" style="margin-top: 30px;">
+            <div class="col-md-offset-1 col-md-10">
+                <div class="row my-row">
+                    <div class="col-md-offset-1 col-md-5">Пользователь</div>
+                    <div class="col-md-offset-1 col-md-5">Сумма</div>
+                </div>
+
+                {% for item in stat_items %}
+                    <div class="row my-row">
+                        <div class="col-md-offset-1 col-md-5">{{ item.user.username }}</div>
+                        <div class="col-md-offset-1 col-md-5">{{ item.sum }}</div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock main_content %}

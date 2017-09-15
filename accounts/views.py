@@ -1,41 +1,50 @@
 import json
+from itertools import groupby
 
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from urllib.parse import unquote_plus
 
+from django.urls import reverse
+from django.views.generic import DetailView, ListView, RedirectView, TemplateView
 from django.views.decorators.http import require_POST
 
 from cafe.models import Product
 from .models import Order, OrderItem
 
 
-def profile(request):
-    orders = Order.objects.filter(user=request.user)
+class ProfileView(ListView):
+    template_name = 'accounts/profile.html'
+    model = Order
+    context_object_name = 'orders'
 
-    return render(request, 'accounts/profile.html', {
-        'orders': orders,
-        'sum': sum(o.sum for o in orders if o.completed)
-    })
+    def get_queryset(self):
+        return Order.objects.filter(user=self.request.user)
+
+    def get_context_data(self, **kwargs):
+        context = super(ProfileView, self).get_context_data(**kwargs)
+        context['sum'] = sum(o.sum for o in self.get_queryset() if o.completed)
+        return context
 
 
-def statistics(request):
-    orders = list(Order.objects.all())
-    # years = [o. for o in orders]
+class StatsView(DetailView):
+    template_name = 'accounts/stats.html'
+    context_object_name = 'stat_items'
 
-    result = {
-        'years': {
-            'year': 2017,
-            'employees': [
-                {
-                    'name': 'Tom',
-                    'months': [100, 200]
-                }
-            ]
-        }
-    }
+    def get_queryset(self):
+        year = self.request.GET['year']
+        month = self.request.GET['month']
+        return Order.objects.filter(completed=True, date__year=year, date__month=month)
 
-    return render(request, 'accounts/statistics.html')
+    def get_object(self, queryset=None):
+        groups = groupby(self.get_queryset(), lambda o: o.user)
+        return [{'user': user, 'sum': sum(o.sum for o in orders)} for user, orders in groups]
+
+    def get_context_data(self, **kwargs):
+        context = super(StatsView, self).get_context_data(**kwargs)
+        context['year'] = self.request.GET['year']
+        context['month'] = self.request.GET['month']
+        return context
 
 
 @require_POST
@@ -55,24 +64,28 @@ def add_order(request):
     return JsonResponse({'status': 'success'})
 
 
-def order(request, pk):
-    order = get_object_or_404(Order, pk=pk)
+class OrderView(DetailView):
+    template_name = 'accounts/order.html'
+    model = Order
 
-    return render(request, 'accounts/order.html', {
-        'order': order,
-        'order_items': list(order.orderitem_set.all())
-    })
+    def get_context_data(self, **kwargs):
+        context = super(OrderView, self).get_context_data(**kwargs)
+        context['order_items'] = list(self.get_object().orderitem_set.all())
+        return context
 
 
-@require_POST
-def check_order(request):
-    token = request.POST.get('token')
-    current = Order.from_token(token)
+class CheckOrderView(RedirectView):
+    http_method_names = ['post']
 
-    if not request.user.is_superuser and request.user != current.user:
-        redirect('menu')
+    def get_redirect_url(self, *args, **kwargs):
+        request = self.request
+        token = request.POST.get('token')
+        order = Order.from_token(token)
 
-    return redirect('accounts:order', pk=current.pk)
+        if request.user == order.user or request.user.is_superuser:
+            return reverse('accounts:order', args=(order.pk,))
+        else:
+            return reverse('cafe:most_popular')
 
 
 @require_POST

@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import Sum, F
+from django.shortcuts import get_object_or_404
 from django.utils.timezone import now
 from base64 import b64encode, b64decode
 
@@ -25,10 +26,11 @@ class Order(models.Model):
     @staticmethod
     def from_token(token):
         date, pk = b64decode(bytes(token, 'utf-8')).decode().split('#')
-        return Order.objects.get(pk=pk, date=date)
+        return get_object_or_404(Order, pk=pk, date=date)
 
     def __str__(self):
-        return '%s, %s, %s' % (self.user, self.date.astimezone().strftime('%d/%m/%y %H:%M:%S'), self.sum)
+        date_str = self.date.astimezone().strftime('%d/%m/%y %H:%M:%S')
+        return '%s, %s, %s, %s' % (self.user, date_str, self.sum, self.completed)
 
     class Meta:
         db_table = 'order'

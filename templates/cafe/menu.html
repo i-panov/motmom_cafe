@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="{% static 'css/menu.css' %}">
 {% endblock %}
 {% block main_content %}
-<div class="col-md-offset-1 col-md-1">
+<div class="col-md-offset-1 col-md-1" style="margin-top: 5%;">
     {% for category in categories %}
         <a class="{% if category.id == checked_category.id %}active{% endif %}" style="display: block;"
            href="{% if category.id == '' %}{% url 'cafe:most_popular' %}{% else %}{% url 'cafe:category' pk=category.id %}{% endif %}"
@@ -15,7 +15,7 @@
         </a>
     {% endfor %}
 </div>
-<div class="col-md-offset-1 col-md-6" style="background-color: lightblue;">
+<div class="col-md-offset-1 col-md-6">
     <div class="row">
         <h4 class="col-md-offset-5" style="color: red;">{{ checked_category.name }}</h4>
     </div>
