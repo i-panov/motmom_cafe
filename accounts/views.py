@@ -1,19 +1,18 @@
 import json
 from itertools import groupby
 
+from django.contrib.auth.decorators import user_passes_test, login_required
+from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.http import JsonResponse
-from django.shortcuts import render, redirect, get_object_or_404
-from urllib.parse import unquote_plus
-
 from django.urls import reverse
-from django.views.generic import DetailView, ListView, RedirectView, TemplateView
 from django.views.decorators.http import require_POST
+from django.views.generic import DetailView, ListView, RedirectView
 
 from cafe.models import Product
 from .models import Order, OrderItem
 
 
-class ProfileView(ListView):
+class ProfileView(LoginRequiredMixin, ListView):
     template_name = 'accounts/profile.html'
     model = Order
     context_object_name = 'orders'
@@ -27,9 +26,12 @@ class ProfileView(ListView):
         return context
 
 
-class StatsView(DetailView):
+class StatsView(UserPassesTestMixin, DetailView):
     template_name = 'accounts/stats.html'
     context_object_name = 'stat_items'
+
+    def test_func(self):
+        return self.request.user.is_superuser
 
     def get_queryset(self):
         year = self.request.GET['year']
@@ -48,6 +50,7 @@ class StatsView(DetailView):
 
 
 @require_POST
+@login_required
 def add_order(request):
     cart = json.loads(request.POST['cart'])
     order = Order(user=request.user)
@@ -64,7 +67,7 @@ def add_order(request):
     return JsonResponse({'status': 'success'})
 
 
-class OrderView(DetailView):
+class OrderView(LoginRequiredMixin, DetailView):
     template_name = 'accounts/order.html'
     model = Order
 
@@ -89,6 +92,7 @@ class CheckOrderView(RedirectView):
 
 
 @require_POST
+@user_passes_test(lambda u: u.is_superuser)
 def set_order_status(request):
     order = Order.objects.get(pk=request.POST['pk'])
     order.completed = request.POST['status']

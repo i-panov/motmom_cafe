@@ -1,32 +1,27 @@
 # coding: utf-8
 
-from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
-from django.views.decorators.http import require_POST
-
 import json
 
-from django.views.generic import TemplateView, DetailView, ListView, RedirectView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import DetailView, ListView
 
 from .models import Category, Product
 
 
-MOST_POPULAR_CATEGORY = Category(id='', name='Самое популярное')
-
-
-class MenuView(DetailView):
+class MenuView(LoginRequiredMixin, DetailView):
     template_name = 'cafe/menu.html'
     model = Category
     context_object_name = 'checked_category'
 
     categories = Category.objects.all()
+    MOST_POPULAR_CATEGORY = Category(id='', name='Самое популярное')
 
     def get_object(self, queryset=None):
-        return MOST_POPULAR_CATEGORY
+        return self.MOST_POPULAR_CATEGORY
 
     def get_context_data(self, **kwargs):
         context = super(MenuView, self).get_context_data(**kwargs)
-        context['categories'] = [MOST_POPULAR_CATEGORY] + list(self.categories)
+        context['categories'] = [self.MOST_POPULAR_CATEGORY] + list(self.categories)
         return context
 
 
@@ -47,7 +42,7 @@ class CategoryView(MenuView):
         return context
 
 
-class RenderCartView(ListView):
+class RenderCartView(LoginRequiredMixin, ListView):
     template_name = 'cafe/cart.html'
     http_method_names = ['post']
     context_object_name = 'products'
